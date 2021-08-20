@@ -1,6 +1,5 @@
 import 'package:apptc/core/utils.dart';
 import 'package:apptc/src/ui/login/cadastro.dart';
-import 'package:apptc/src/ui/login/login_recuperasenha.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -157,7 +156,7 @@ class _LoginState extends State<Login> {
           onPressed: () {},
         ));
 
-    final lnkEsqueci = GestureDetector(
+    /* final lnkEsqueci = GestureDetector(
         child: Text("Esqueci minha senha",
             style: TextStyle(
                 color: Color(0xffb22222),
@@ -166,7 +165,7 @@ class _LoginState extends State<Login> {
         onTap: () {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => LoginRecuperaSenha()));
-        });
+        }); */
 
     final lnkCadastrar = GestureDetector(
         child: Column(
@@ -246,10 +245,6 @@ class _LoginState extends State<Login> {
                     child: senha),
                 chkLembrar,
                 btnEntrar,
-                SizedBox(
-                  height: 5,
-                ),
-                lnkEsqueci,
                 SizedBox(height: 15),
                 Column(
                   children: [

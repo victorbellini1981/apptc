@@ -151,6 +151,7 @@ class _LoginRecuperaSenhaState extends State<LoginRecuperaSenha> {
         Map<String, dynamic>? retorno =
             await promessa(_scaffoldKey, "GetSenha", obj);
         if (retorno!['situacao'] == "sucesso") {
+          print('entrou get senha');
           showDialog(
               context: context,
               builder: (context) {
@@ -363,25 +364,10 @@ class _LoginRecuperaSenhaState extends State<LoginRecuperaSenha> {
           /* Navigator.push(
             context, MaterialPageRoute(builder: (context) => Login())); */
         } else if (retorno['msg'] == "E-mail não cadastrado.") {
-          Map obj = Map();
-          obj['email'] = _emailController.text;
-          Map<String, dynamic>? retorno =
-              await promessa(_scaffoldKey, "GetPessoaEmail", obj);
-          if (retorno!['situacao'] == 'sucesso' &&
-              retorno['obj']['idpessoa'] != 0) {
-            // ignore: deprecated_member_use
-            _scaffoldKey.currentState!.showSnackBar(new SnackBar(
-                duration: Duration(seconds: 2),
-                content: new Text(
-                  'Seu cadastro foi realizado pelas redes socias, Entre pelo Google ou pelo Facebook',
-                  maxLines: 4,
-                )));
-          } else {
-            // ignore: deprecated_member_use
-            _scaffoldKey.currentState!.showSnackBar(new SnackBar(
-                duration: Duration(seconds: 1),
-                content: new Text('Usuário não cadastrado')));
-          }
+          // ignore: deprecated_member_use
+          _scaffoldKey.currentState!.showSnackBar(new SnackBar(
+              duration: Duration(seconds: 1),
+              content: new Text('Usuário não cadastrado')));
         }
       } else {
         // ignore: deprecated_member_use
