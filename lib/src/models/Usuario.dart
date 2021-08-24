@@ -1,9 +1,9 @@
 class Usuario {
-  late int idusuario;
-  late String email;
-  late String senha;
+  int idusuario;
+  String email;
+  String senha;
 
-  Usuario({required this.idusuario, required this.email, required this.senha});
+  Usuario({this.idusuario, this.email, this.senha});
 
   Usuario.fromJson(Map<String, dynamic> json) {
     idusuario = json['idusuario'];

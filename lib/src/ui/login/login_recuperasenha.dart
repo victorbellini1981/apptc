@@ -4,7 +4,7 @@ import 'package:apptc/src/ui/login/login.dart';
 import 'package:flutter/material.dart';
 
 class LoginRecuperaSenha extends StatefulWidget {
-  const LoginRecuperaSenha({Key? key}) : super(key: key);
+  const LoginRecuperaSenha({Key key}) : super(key: key);
 
   @override
   _LoginRecuperaSenhaState createState() => _LoginRecuperaSenhaState();
@@ -57,7 +57,7 @@ class _LoginRecuperaSenhaState extends State<LoginRecuperaSenha> {
         keyboardType: TextInputType.text,
         controller: _emailController,
         validator: (value) {
-          if (value!.isEmpty) {
+          if (value.isEmpty) {
             return 'Campo obrigatório';
           }
           return null;
@@ -95,9 +95,9 @@ class _LoginRecuperaSenhaState extends State<LoginRecuperaSenha> {
         Map obj = Map();
         obj['senha'] = novasenha;
 
-        Map<String, dynamic>? retorno = await promessaRecSenha(
+        Map<String, dynamic> retorno = await promessaRecSenha(
             _scaffoldKey, 'SetSenha', obj, _codigoController.text);
-        if (retorno!['situacao'] == 'sucesso') {
+        if (retorno['situacao'] == 'sucesso') {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => Login()));
         } else {
@@ -148,9 +148,9 @@ class _LoginRecuperaSenhaState extends State<LoginRecuperaSenha> {
       if (_emailController.text.isNotEmpty) {
         Map obj = Map();
         obj['email'] = _emailController.text;
-        Map<String, dynamic>? retorno =
+        Map<String, dynamic> retorno =
             await promessa(_scaffoldKey, "GetSenha", obj);
-        if (retorno!['situacao'] == "sucesso") {
+        if (retorno['situacao'] == "sucesso") {
           print('entrou get senha');
           showDialog(
               context: context,
@@ -204,7 +204,7 @@ class _LoginRecuperaSenhaState extends State<LoginRecuperaSenha> {
                                               keyboardType: TextInputType.text,
                                               controller: _codigoController,
                                               validator: (value) {
-                                                if (value!.isEmpty) {
+                                                if (value.isEmpty) {
                                                   return 'Campo obrigatório';
                                                 }
                                                 return null;
@@ -260,7 +260,7 @@ class _LoginRecuperaSenhaState extends State<LoginRecuperaSenha> {
                                                     TextInputType.text,
                                                 controller: _senhaController,
                                                 validator: (value) {
-                                                  if (value!.isEmpty) {
+                                                  if (value.isEmpty) {
                                                     return 'Campo obrigatório';
                                                   }
                                                   return null;
@@ -319,7 +319,7 @@ class _LoginRecuperaSenhaState extends State<LoginRecuperaSenha> {
                                                 controller:
                                                     _confirmarController,
                                                 validator: (value) {
-                                                  if (value!.isEmpty) {
+                                                  if (value.isEmpty) {
                                                     return 'Campo obrigatório';
                                                   }
                                                   return null;
@@ -365,13 +365,13 @@ class _LoginRecuperaSenhaState extends State<LoginRecuperaSenha> {
             context, MaterialPageRoute(builder: (context) => Login())); */
         } else if (retorno['msg'] == "E-mail não cadastrado.") {
           // ignore: deprecated_member_use
-          _scaffoldKey.currentState!.showSnackBar(new SnackBar(
+          _scaffoldKey.currentState.showSnackBar(new SnackBar(
               duration: Duration(seconds: 1),
               content: new Text('Usuário não cadastrado')));
         }
       } else {
         // ignore: deprecated_member_use
-        _scaffoldKey.currentState!.showSnackBar(new SnackBar(
+        _scaffoldKey.currentState.showSnackBar(new SnackBar(
             duration: Duration(seconds: 1),
             content: new Text('Digite seu e-mail')));
       }

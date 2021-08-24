@@ -76,7 +76,7 @@ Future<String> getUrlServidor() async {
   }
 }*/
 
-Future<Map<String, dynamic>?> promessaRecSenha(
+Future<Map<String, dynamic>> promessaRecSenha(
     GlobalKey<ScaffoldState> scaffoldKey,
     String servico,
     Object obj,
@@ -97,7 +97,7 @@ Future<Map<String, dynamic>?> promessaRecSenha(
     } catch (e) {
       //throw Exception('Formato inválido de retorno');
       // ignore: deprecated_member_use
-      scaffoldKey.currentState!.showSnackBar(new SnackBar(
+      scaffoldKey.currentState.showSnackBar(new SnackBar(
           content: new Text(
               "Falha ao ler dados do servidor! Verifique sua conexão com a internet.")));
 
@@ -106,14 +106,14 @@ Future<Map<String, dynamic>?> promessaRecSenha(
   } else {
     //throw Exception('Failed to load post');
     // ignore: deprecated_member_use
-    scaffoldKey.currentState!.showSnackBar(new SnackBar(
+    scaffoldKey.currentState.showSnackBar(new SnackBar(
         content: new Text(
             "Falha de comunicação! Verifique sua conexão com a internet.")));
     return null;
   }
 }
 
-Future<Map<String, dynamic>?> promessa(
+Future<Map<String, dynamic>> promessa(
     GlobalKey<ScaffoldState> scaffoldKey, String servico, Object obj) async {
   String objjson = json.encode(obj);
 
@@ -132,7 +132,7 @@ Future<Map<String, dynamic>?> promessa(
       //throw Exception('Formato inválido de retorno');
 
       // ignore: deprecated_member_use
-      scaffoldKey.currentState!.showSnackBar(new SnackBar(
+      scaffoldKey.currentState.showSnackBar(new SnackBar(
           content: new Text(
               "Falha ao ler dados do servidor! Verifique sua conexão com a internet.")));
 
@@ -141,14 +141,14 @@ Future<Map<String, dynamic>?> promessa(
   } else {
     //throw Exception('Failed to load post');
     // ignore: deprecated_member_use
-    scaffoldKey.currentState!.showSnackBar(new SnackBar(
+    scaffoldKey.currentState.showSnackBar(new SnackBar(
         content: new Text(
             "Falha de comunicação! Verifique sua conexão com a internet.")));
     return null;
   }
 }
 
-Future<Map<String, dynamic>?> promessaB(GlobalKey<ScaffoldState> scaffoldKey,
+Future<Map<String, dynamic>> promessaB(GlobalKey<ScaffoldState> scaffoldKey,
     String servico, String referencia, Object obj) async {
   //String objjson = json.encode(obj);
   /*String url =
@@ -165,7 +165,7 @@ Future<Map<String, dynamic>?> promessaB(GlobalKey<ScaffoldState> scaffoldKey,
     } catch (e) {
       //throw Exception('Formato inválido de retorno');
       // ignore: deprecated_member_use
-      scaffoldKey.currentState!.showSnackBar(new SnackBar(
+      scaffoldKey.currentState.showSnackBar(new SnackBar(
           content: new Text(
               "Falha ao ler dados do servidor! Verifique sua conexão com a internet.")));
 
@@ -174,7 +174,7 @@ Future<Map<String, dynamic>?> promessaB(GlobalKey<ScaffoldState> scaffoldKey,
   } else {
     //throw Exception('Failed to load post');
     // ignore: deprecated_member_use
-    scaffoldKey.currentState!.showSnackBar(new SnackBar(
+    scaffoldKey.currentState.showSnackBar(new SnackBar(
         content: new Text(
             "Falha de comunicação! Verifique sua conexão com a internet.")));
     return null;

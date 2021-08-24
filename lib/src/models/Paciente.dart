@@ -1,32 +1,32 @@
 class Paciente {
-  late int idpaciente;
-  late int idusuario;
-  late String nome;
-  late String email;
-  late String cpf;
-  late String telefone;
-  late String cep;
-  late String uf;
-  late String logradouro;
-  late String numero;
-  late String complemento;
-  late String bairro;
-  late String cidade;
+  int idpaciente;
+  int idusuario;
+  String nome;
+  String email;
+  String cpf;
+  String telefone;
+  String cep;
+  String uf;
+  String logradouro;
+  String numero;
+  String complemento;
+  String bairro;
+  String cidade;
 
   Paciente({
-    required this.idpaciente,
-    required this.idusuario,
-    required this.nome,
-    required this.email,
-    required this.cpf,
-    required this.telefone,
-    required this.cep,
-    required this.uf,
-    required this.logradouro,
-    required this.numero,
-    required this.complemento,
-    required this.bairro,
-    required this.cidade,
+    this.idpaciente,
+    this.idusuario,
+    this.nome,
+    this.email,
+    this.cpf,
+    this.telefone,
+    this.cep,
+    this.uf,
+    this.logradouro,
+    this.numero,
+    this.complemento,
+    this.bairro,
+    this.cidade,
   });
 
   Paciente.fromJson(Map<String, dynamic> json) {

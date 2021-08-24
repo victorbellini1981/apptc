@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:apptc/src/public/globals.dart';
 import 'package:apptc/src/ui/login/login.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:easy_mask/easy_mask.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,7 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
 class Perfil extends StatefulWidget {
-  const Perfil({Key? key}) : super(key: key);
+  const Perfil({Key key}) : super(key: key);
 
   @override
   _PerfilState createState() => _PerfilState();
@@ -86,7 +85,7 @@ class _PerfilState extends State<Perfil> {
       keyboardType: TextInputType.text,
       controller: txtnome,
       validator: (value) {
-        if (value!.isEmpty) {
+        if (value.isEmpty) {
           return 'Campo obrigatório';
         }
         return null;
@@ -112,7 +111,7 @@ class _PerfilState extends State<Perfil> {
       keyboardType: TextInputType.text,
       controller: txtemail,
       validator: (value) {
-        if (value!.isEmpty) {
+        if (value.isEmpty) {
           return 'Campo obrigatório';
         }
         return null;
@@ -138,7 +137,7 @@ class _PerfilState extends State<Perfil> {
       controller: txtcpf,
       inputFormatters: [TextInputMask(mask: '999.999.999-99', reverse: false)],
       validator: (value) {
-        if (value!.isEmpty) {
+        if (value.isEmpty) {
           return 'Campo obrigatório';
         }
         return null;
@@ -160,7 +159,7 @@ class _PerfilState extends State<Perfil> {
       controller: txttelefone,
       inputFormatters: [TextInputMask(mask: '(99) 99999-9999', reverse: false)],
       validator: (value) {
-        if (value!.isEmpty) {
+        if (value.isEmpty) {
           return 'Campo obrigatório';
         }
         return null;
@@ -184,7 +183,7 @@ class _PerfilState extends State<Perfil> {
       keyboardType: TextInputType.text,
       controller: txtlogradouro,
       validator: (value) {
-        if (value!.isEmpty) {
+        if (value.isEmpty) {
           return 'Campo obrigatório';
         }
         return null;
@@ -208,7 +207,7 @@ class _PerfilState extends State<Perfil> {
       keyboardType: TextInputType.number,
       controller: txtnumero,
       validator: (value) {
-        if (value!.isEmpty) {
+        if (value.isEmpty) {
           return 'Campo obrigatório';
         }
         return null;
@@ -232,7 +231,7 @@ class _PerfilState extends State<Perfil> {
       keyboardType: TextInputType.text,
       controller: txtcomplemento,
       validator: (value) {
-        if (value!.isEmpty) {
+        if (value.isEmpty) {
           return 'Campo obrigatório';
         }
         return null;
@@ -259,7 +258,7 @@ class _PerfilState extends State<Perfil> {
       controller: txtcep,
       inputFormatters: [TextInputMask(mask: '99999-999', reverse: false)],
       validator: (value) {
-        if (value!.isEmpty) {
+        if (value.isEmpty) {
           return 'Campo obrigatório';
         }
         return null;
@@ -285,7 +284,7 @@ class _PerfilState extends State<Perfil> {
       keyboardType: TextInputType.text,
       controller: txtestado,
       validator: (value) {
-        if (value!.isEmpty) {
+        if (value.isEmpty) {
           return 'Campo obrigatório';
         }
         return null;
@@ -307,7 +306,7 @@ class _PerfilState extends State<Perfil> {
       keyboardType: TextInputType.text,
       controller: txtbairro,
       validator: (value) {
-        if (value!.isEmpty) {
+        if (value.isEmpty) {
           return 'Campo obrigatório';
         }
         return null;
@@ -329,7 +328,7 @@ class _PerfilState extends State<Perfil> {
       keyboardType: TextInputType.text,
       controller: txtcidade,
       validator: (value) {
-        if (value!.isEmpty) {
+        if (value.isEmpty) {
           return 'Campo obrigatório';
         }
         return null;
@@ -340,7 +339,7 @@ class _PerfilState extends State<Perfil> {
         width: 150,
         // ignore: deprecated_member_use
         child: RaisedButton(
-          color: Color(0xffec9492),
+          color: Color(0xffb22222),
           child: Center(
             child: Text(
               "SALVAR",
@@ -356,7 +355,7 @@ class _PerfilState extends State<Perfil> {
           child: Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          backgroundColor: Color(0xffedb3b2),
+          backgroundColor: Color(0xffb22222),
           automaticallyImplyLeading: false,
           centerTitle: true,
           title: Text(

@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+  const Login({Key key}) : super(key: key);
 
   @override
   _LoginState createState() => _LoginState();
@@ -32,8 +32,8 @@ class _LoginState extends State<Login> {
   lembrarme() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      _loginController.text = prefs.getString('emailuser')!;
-      _senhaController.text = prefs.getString('senhauser')!;
+      _loginController.text = prefs.getString('emailuser');
+      _senhaController.text = prefs.getString('senhauser');
       if (_loginController.text != "" && _senhaController.text == "") {
         lembrar = true;
       }
@@ -71,7 +71,7 @@ class _LoginState extends State<Login> {
         keyboardType: TextInputType.text,
         controller: _loginController,
         validator: (value) {
-          if (value!.isEmpty) {
+          if (value.isEmpty) {
             return 'Campo obrigatório';
           }
           return null;
@@ -108,7 +108,7 @@ class _LoginState extends State<Login> {
         keyboardType: TextInputType.text,
         controller: _senhaController,
         validator: (value) {
-          if (value!.isEmpty) {
+          if (value.isEmpty) {
             return 'Campo obrigatório';
           }
           return null;
@@ -140,6 +140,8 @@ class _LoginState extends State<Login> {
         )
       ],
     );
+
+    void entrar() async {}
 
     final btnEntrar = SizedBox(
         width: MediaQuery.of(context).size.width * 0.6,

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class Cadastro extends StatefulWidget {
-  const Cadastro({Key? key}) : super(key: key);
+  const Cadastro({Key key}) : super(key: key);
 
   @override
   _CadastroState createState() => _CadastroState();
@@ -38,25 +38,25 @@ class _CadastroState extends State<Cadastro> {
         obj["email"] = txtlogin.text.trim();
         obj["senha"] =
             textToMd5("*${txtsenha.text.trim()}${configApp.nomeApp}");
-        Map<String, dynamic>? retorno =
+        Map<String, dynamic> retorno =
             await promessa(_scaffoldKey, "GetLoginP", obj);
         ////print(json.encode(retorno["arrayObj"]));
-        if (retorno!["situacao"] == "sucesso" &&
+        if (retorno["situacao"] == "sucesso" &&
             retorno['obj']['idpaciente'] != 0) {
           // ignore: deprecated_member_use
-          _scaffoldKey.currentState!.showSnackBar(new SnackBar(
+          _scaffoldKey.currentState.showSnackBar(new SnackBar(
               duration: Duration(seconds: 1),
               content: new Text('Usuario já cadastrado!')));
           setState(() {
             cadastrando = false;
           });
         } else {
-          Map<String, dynamic>? retorno1 =
+          Map<String, dynamic> retorno1 =
               await promessa(_scaffoldKey, "PostUsuarioP", obj);
-          if (retorno1!["situacao"] == "sucesso" &&
+          if (retorno1["situacao"] == "sucesso" &&
               retorno1['obj']['idpaciente'] != 0) {
             // ignore: deprecated_member_use
-            _scaffoldKey.currentState!.showSnackBar(new SnackBar(
+            _scaffoldKey.currentState.showSnackBar(new SnackBar(
                 duration: Duration(seconds: 1),
                 content: new Text('Cadastro realizado com sucesso!')));
             Future.delayed(Duration(seconds: 1), () {
@@ -67,7 +67,7 @@ class _CadastroState extends State<Cadastro> {
         }
       } else {
         // ignore: deprecated_member_use
-        _scaffoldKey.currentState!.showSnackBar(SnackBar(
+        _scaffoldKey.currentState.showSnackBar(SnackBar(
           content: Text('Senha deve conter no máximo 8 dígitos.'),
           duration: Duration(seconds: 5),
         ));
@@ -77,7 +77,7 @@ class _CadastroState extends State<Cadastro> {
       }
     } else {
       // ignore: deprecated_member_use
-      _scaffoldKey.currentState!.showSnackBar(SnackBar(
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
         content: Text('E-mail inválido.'),
         duration: Duration(seconds: 2),
       ));
@@ -118,7 +118,7 @@ class _CadastroState extends State<Cadastro> {
         keyboardType: TextInputType.text,
         controller: txtlogin,
         validator: (value) {
-          if (value!.isEmpty) {
+          if (value.isEmpty) {
             return 'Campo obrigatório';
           }
           return null;
@@ -176,7 +176,7 @@ class _CadastroState extends State<Cadastro> {
         obscureText: _obscuresenha,
         controller: txtsenha,
         validator: (value) {
-          if (value!.isEmpty) {
+          if (value.isEmpty) {
             return 'Campo obrigatório';
           }
           return null;
