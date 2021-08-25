@@ -1,4 +1,6 @@
 import 'package:apptc/core/utils.dart';
+import 'package:apptc/src/public/globals.dart';
+import 'package:apptc/src/ui/home/inicial.dart';
 import 'package:apptc/src/ui/login/cadastro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -141,7 +143,50 @@ class _LoginState extends State<Login> {
       ],
     );
 
-    void entrar() async {}
+    void entrar() async {
+      if (_formKey.currentState.validate()) {
+        Map obj = Map();
+        obj["email"] = _loginController.text.trim();
+        obj["senha"] =
+            textToMd5("*${_senhaController.text.trim()}${configApp.nomeApp}");
+
+        Map retorno5 = await promessa(_scaffoldKey, "GetLoginP", obj);
+        ////print(json.encode(retorno["arrayObj"]));
+        if (retorno5["situacao"] == "sucesso" &&
+            retorno5['obj']['idusuario'] != 0) {
+          if (lembrar == true) {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            prefs.setString('emailuser', _loginController.text);
+            prefs.setString(
+                'senhauser',
+                textToMd5(
+                    "*${_senhaController.text.trim()}${configApp.nomeApp}"));
+            //print(prefs.getString('senhauser'));
+          } else {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            prefs.setString('emailuser', "");
+            prefs.setString('senhauser', "");
+          }
+          idUsuario = retorno5['obj']['idusuario'];
+          nomeusuario = retorno5['obj']['nome'];
+          print(nomeusuario);
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Inicial()));
+        } else {
+          // ignore: deprecated_member_use
+          _scaffoldKey.currentState.showSnackBar(new SnackBar(
+              duration: Duration(seconds: 2),
+              content: new Text('Usuário ou Senha inválidos')));
+          Navigator.of(context).pop();
+        }
+      } else {
+        // ignore: deprecated_member_use
+        _scaffoldKey.currentState.showSnackBar(new SnackBar(
+            duration: Duration(seconds: 2),
+            content: new Text('Algo errado com os dados')));
+        Navigator.of(context).pop();
+      }
+    }
 
     final btnEntrar = SizedBox(
         width: MediaQuery.of(context).size.width * 0.6,
@@ -155,7 +200,7 @@ class _LoginState extends State<Login> {
                   color: Colors.white, fontSize: 20, fontFamily: 'Montserrat'),
             ),
           ),
-          onPressed: () {},
+          onPressed: entrar,
         ));
 
     /* final lnkEsqueci = GestureDetector(
