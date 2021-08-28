@@ -10,3 +10,5 @@ var nomeusuario = "";
 List listaAtividades = new List();
 // ignore: deprecated_member_use
 List listaBatimentos = new List();
+int pos = 0;
+var teste;

@@ -15,55 +15,502 @@ class Inicial extends StatefulWidget {
 class _InicialState extends State<Inicial> {
   final _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  bool finalizado = false;
   var interval = "";
+  List list;
+  Dialog ativ;
+  var dataAtv = "";
+
+  final _atividade = TextEditingController();
 
   @override
   void initState() {
     super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    void iniciar() async {
-      for (int i = 0; i < 24; i++) {
-        interval = i.toString();
-
-        Map obj = new Map();
-        obj['data_atv'] = interval;
-        obj['atividade'] = "";
-        obj['idusuario'] = idUsuario;
-
-        Map retorno = await promessa(_scaffoldKey, "PostAtividade", obj);
-
-        if (retorno["situacao"] == "sucesso" &&
-            retorno['obj']['idatividade'] != 0 &&
-            i == 23) {
-          // ignore: deprecated_member_use
-          _scaffoldKey.currentState.showSnackBar(new SnackBar(
-              duration: Duration(seconds: 2),
-              content: new Text('Atividades cadastradas com sucesso')));
-        }
-      }
+  carregaAtividades() async {
+    Map obj = Map();
+    obj['idusuario'] = idUsuario;
+    Map retorno = await promessa(_scaffoldKey, 'GetAtividades', obj);
+    if (retorno['situacao'] == 'sucesso' && retorno['obj'].length > 0) {
+      list = retorno['obj'];
+      listaAtividades = list.map((atv) => Atividade.fromJson(atv)).toList();
+      /* for (int i = 0; i < listaAtividades.length; i++) {
+        var ano = listaAtividades[i].data_atv.split("-")[0];
+        var mes = listaAtividades[i].data_atv.split("-")[1];
+        var dia = listaAtividades[i].data_atv.split("-")[2];
+        dia = dia.split(" ")[0];
+        var hora = listaAtividades[i].data_atv.split(" ")[1];
+        listaAtividades[i].data_atv = dia + "/" + mes + "/" + ano + " " + hora;
+      } */
+    } else {
+      listaAtividades = [];
     }
 
-    void finalizar() {}
+    return listaAtividades;
+  }
 
-    final btnEntrar = SizedBox(
-        width: MediaQuery.of(context).size.width * 0.6,
+  void iniciar() async {
+    for (int i = 0; i < 24; i++) {
+      interval = i.toString();
+
+      Map obj = new Map();
+      obj['data_atv'] = interval;
+      obj['atividade'] = "escolha a atividade";
+      obj['idusuario'] = idUsuario;
+
+      Map retorno = await promessa(_scaffoldKey, "PostAtividade", obj);
+
+      if (retorno["situacao"] == "sucesso" &&
+          retorno['obj']['idatividade'] != 0 &&
+          i == 23) {
         // ignore: deprecated_member_use
-        child: RaisedButton(
-          color: Color(0xffb22222),
-          child: Center(
-            child: Text(
-              finalizado == false ? "INICIAR" : "FINALIZAR",
-              style: TextStyle(
-                  color: Colors.white, fontSize: 20, fontFamily: 'Montserrat'),
-            ),
-          ),
-          onPressed: finalizado == true ? finalizar : iniciar,
-        ));
+        _scaffoldKey.currentState.showSnackBar(new SnackBar(
+            duration: Duration(seconds: 2),
+            content: new Text('Atividades cadastradas com sucesso')));
+      }
+    }
+  }
 
+  void finalizar() {}
+
+  atualizaAtvHora() async {
+    Navigator.of(context).pop();
+    Map obj = Map();
+    obj['idusuario'] = idUsuario;
+    obj['data_atv'] = dataAtv;
+    obj['atividade'] = _atividade.text;
+    Map retorno = await promessa(_scaffoldKey, 'UpAtividade', obj);
+    if (retorno['situacao'] == 'sucesso') {
+      setState(() {
+        listaAtividades[pos].atividade = _atividade.text;
+      });
+    }
+  }
+
+  buildCarregaAtividades() {
+    return FutureBuilder(
+        future: carregaAtividades(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            if (listaAtividades.length == 0) {
+              return Container(
+                  width: MediaQuery.of(context).size.width / 2,
+                  child: SizedBox(
+                      width: 150,
+                      // ignore: deprecated_member_use
+                      child: RaisedButton(
+                        color: Color(0xffb22222),
+                        child: Center(
+                          child: Text(
+                            "INICIAR",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontFamily: 'Montserrat'),
+                          ),
+                        ),
+                        onPressed: iniciar,
+                      )));
+            } else {
+              return Column(
+                children: [
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 1,
+                    height: MediaQuery.of(context).size.height / 3,
+                    child: ListView.builder(
+                      itemCount: listaAtividades.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
+                          alignment: Alignment.center,
+                          width: MediaQuery.of(context).size.width * 1,
+                          padding: EdgeInsets.only(right: 10, left: 10),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 4,
+                                child: Text(
+                                  listaAtividades[index].data_atv,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Color(0xffb22222),
+                                      fontSize: 15,
+                                      fontFamily: 'Montserrat'),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 6,
+                                child: Text(
+                                  listaAtividades[index].atividade,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Color(0xffb22222),
+                                      fontSize: 15,
+                                      fontFamily: 'Montserrat'),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 3,
+                                child: SizedBox(
+                                    // ignore: deprecated_member_use
+                                    child: RaisedButton(
+                                  color: index == 0
+                                      ? Color(0xffb22222)
+                                      : listaAtividades[index - 1].atividade ==
+                                              "escolha a atividade"
+                                          ? Colors.grey
+                                          : Color(0xffb22222),
+                                  child: Center(
+                                    child: Text(
+                                      "Atv",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontFamily: 'Montserrat'),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    pos = index;
+                                    dataAtv = listaAtividades[index].data_atv;
+                                    index == 0
+                                        ? showDialog(
+                                            context: context,
+                                            builder:
+                                                (BuildContext context) =>
+                                                    Dialog(
+                                                      elevation: 10,
+                                                      child: Wrap(children: [
+                                                        Container(
+                                                            margin:
+                                                                EdgeInsets.only(
+                                                                    top: 0),
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                1,
+                                                            child: Column(
+                                                              children: [
+                                                                Container(
+                                                                  width: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .width *
+                                                                      1,
+                                                                  height: 50,
+                                                                  color: Color(
+                                                                      0xffb22222),
+                                                                  child: Stack(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    children: [
+                                                                      Positioned(
+                                                                        top: 0,
+                                                                        left: 5,
+                                                                        child:
+                                                                            IconButton(
+                                                                          icon:
+                                                                              Icon(Icons.close),
+                                                                          color:
+                                                                              Colors.white,
+                                                                          iconSize:
+                                                                              30.0,
+                                                                          onPressed:
+                                                                              () {
+                                                                            Navigator.push(context,
+                                                                                MaterialPageRoute(builder: (context) => Inicial()));
+                                                                          },
+                                                                        ),
+                                                                      ),
+                                                                      Text(
+                                                                        "Digite a atividade",
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style: TextStyle(
+                                                                            color: Colors
+                                                                                .white,
+                                                                            fontSize:
+                                                                                20,
+                                                                            fontFamily:
+                                                                                'Montserrat'),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                  height: 10,
+                                                                ),
+                                                                Container(
+                                                                  margin: EdgeInsets
+                                                                      .only(
+                                                                          left:
+                                                                              20,
+                                                                          right:
+                                                                              20),
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                          border:
+                                                                              Border.all(
+                                                                    color: Color(
+                                                                        0xffb22222),
+                                                                  )),
+                                                                  child:
+                                                                      TextFormField(
+                                                                    decoration:
+                                                                        const InputDecoration(
+                                                                      contentPadding: EdgeInsets.fromLTRB(
+                                                                          20.0,
+                                                                          15.0,
+                                                                          20.0,
+                                                                          10.0),
+                                                                      focusedBorder:
+                                                                          UnderlineInputBorder(
+                                                                              borderSide: BorderSide(
+                                                                        color: Colors
+                                                                            .transparent,
+                                                                      )),
+                                                                    ),
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: Color(
+                                                                          0xffb22222),
+                                                                    ),
+                                                                    keyboardType:
+                                                                        TextInputType
+                                                                            .text,
+                                                                    controller:
+                                                                        _atividade,
+                                                                    validator:
+                                                                        (value) {
+                                                                      if (value
+                                                                          .isEmpty) {
+                                                                        return 'Campo obrigatório';
+                                                                      }
+                                                                      return null;
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                  height: 10,
+                                                                ),
+                                                                SizedBox(
+                                                                    width: 150,
+                                                                    // ignore: deprecated_member_use
+                                                                    child:
+                                                                        // ignore: deprecated_member_use
+                                                                        RaisedButton(
+                                                                      color: Color(
+                                                                          0xffb22222),
+                                                                      child:
+                                                                          Center(
+                                                                        child:
+                                                                            Text(
+                                                                          "Registrar",
+                                                                          style: TextStyle(
+                                                                              color: Colors.white,
+                                                                              fontSize: 15,
+                                                                              fontFamily: 'Montserrat'),
+                                                                        ),
+                                                                      ),
+                                                                      onPressed:
+                                                                          atualizaAtvHora,
+                                                                    )),
+                                                                Container(
+                                                                    width: MediaQuery.of(context)
+                                                                            .size
+                                                                            .width *
+                                                                        1,
+                                                                    height: 30,
+                                                                    color: Color(
+                                                                        0xffb22222),
+                                                                    child: Text(
+                                                                        ""))
+                                                              ],
+                                                            )),
+                                                      ]),
+                                                    ))
+                                        : listaAtividades[index - 1]
+                                                    .atividade ==
+                                                "escolha a atividade"
+                                            ? // ignore: deprecated_member_use
+                                            // ignore: deprecated_member_use
+                                            _scaffoldKey.currentState
+                                                // ignore: deprecated_member_use
+                                                .showSnackBar(new SnackBar(
+                                                    duration:
+                                                        Duration(seconds: 2),
+                                                    content: new Text(
+                                                        'Escolha a atividade anterior')))
+                                            : showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        Dialog(
+                                                          elevation: 10,
+                                                          child: Wrap(
+                                                              children: [
+                                                                Container(
+                                                                    margin: EdgeInsets
+                                                                        .only(
+                                                                            top:
+                                                                                0),
+                                                                    width: MediaQuery.of(context)
+                                                                            .size
+                                                                            .width *
+                                                                        1,
+                                                                    child:
+                                                                        Column(
+                                                                      children: [
+                                                                        Container(
+                                                                          width:
+                                                                              MediaQuery.of(context).size.width * 1,
+                                                                          height:
+                                                                              50,
+                                                                          color:
+                                                                              Color(0xffb22222),
+                                                                          child:
+                                                                              Stack(
+                                                                            alignment:
+                                                                                Alignment.center,
+                                                                            children: [
+                                                                              Positioned(
+                                                                                top: 0,
+                                                                                left: 5,
+                                                                                child: IconButton(
+                                                                                  icon: Icon(Icons.close),
+                                                                                  color: Colors.white,
+                                                                                  iconSize: 30.0,
+                                                                                  onPressed: () {
+                                                                                    Navigator.push(context, MaterialPageRoute(builder: (context) => Inicial()));
+                                                                                  },
+                                                                                ),
+                                                                              ),
+                                                                              Text(
+                                                                                "Digite a atividade",
+                                                                                textAlign: TextAlign.center,
+                                                                                style: TextStyle(color: Colors.white, fontSize: 20, fontFamily: 'Montserrat'),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                        SizedBox(
+                                                                          height:
+                                                                              10,
+                                                                        ),
+                                                                        Container(
+                                                                          margin: EdgeInsets.only(
+                                                                              left: 20,
+                                                                              right: 20),
+                                                                          decoration: BoxDecoration(
+                                                                              border: Border.all(
+                                                                            color:
+                                                                                Color(0xffb22222),
+                                                                          )),
+                                                                          child:
+                                                                              TextFormField(
+                                                                            decoration:
+                                                                                const InputDecoration(
+                                                                              contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 10.0),
+                                                                              focusedBorder: UnderlineInputBorder(
+                                                                                  borderSide: BorderSide(
+                                                                                color: Colors.transparent,
+                                                                              )),
+                                                                            ),
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: Color(0xffb22222),
+                                                                            ),
+                                                                            keyboardType:
+                                                                                TextInputType.text,
+                                                                            controller:
+                                                                                _atividade,
+                                                                            validator:
+                                                                                (value) {
+                                                                              if (value.isEmpty) {
+                                                                                return 'Campo obrigatório';
+                                                                              }
+                                                                              return null;
+                                                                            },
+                                                                          ),
+                                                                        ),
+                                                                        SizedBox(
+                                                                          height:
+                                                                              10,
+                                                                        ),
+                                                                        SizedBox(
+                                                                            width:
+                                                                                150,
+                                                                            // ignore: deprecated_member_use
+                                                                            child:
+                                                                                // ignore: deprecated_member_use
+                                                                                RaisedButton(
+                                                                              color: Color(0xffb22222),
+                                                                              child: Center(
+                                                                                child: Text(
+                                                                                  "Registrar",
+                                                                                  style: TextStyle(color: Colors.white, fontSize: 15, fontFamily: 'Montserrat'),
+                                                                                ),
+                                                                              ),
+                                                                              onPressed: atualizaAtvHora,
+                                                                            )),
+                                                                        Container(
+                                                                            width: MediaQuery.of(context).size.width *
+                                                                                1,
+                                                                            height:
+                                                                                30,
+                                                                            color:
+                                                                                Color(0xffb22222),
+                                                                            child: Text(""))
+                                                                      ],
+                                                                    )),
+                                                              ]),
+                                                        ));
+                                  },
+                                )),
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                      width: MediaQuery.of(context).size.width / 2,
+                      child: SizedBox(
+                          width: 150,
+                          // ignore: deprecated_member_use
+                          child: RaisedButton(
+                            color: Color(0xffb22222),
+                            child: Center(
+                              child: Text(
+                                "FINALIZAR",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontFamily: 'Montserrat'),
+                              ),
+                            ),
+                            onPressed: finalizar,
+                          ))),
+                ],
+              );
+            }
+          } else if (snapshot.hasError) {
+            //print('entrou erro');
+            return Text("${snapshot.error}");
+          }
+          return Container();
+        });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
       child: SafeArea(
@@ -143,9 +590,9 @@ class _InicialState extends State<Inicial> {
                     ),
                   ),
                   SizedBox(
-                    height: 30,
+                    height: 10,
                   ),
-                  btnEntrar
+                  buildCarregaAtividades()
                 ],
               ),
             ),

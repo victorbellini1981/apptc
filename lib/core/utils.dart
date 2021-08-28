@@ -34,8 +34,8 @@ Future<String> getUrlServidor() async {
       throw Exception('Failed to load post');
     }
   } else {
-    configApp.urlServidor = "http://192.168.56.1:8080/Projetotc/";
-    //configApp.urlServidor = "http://186.248.131.178:8080/Projetotc/";
+    //configApp.urlServidor = "http://192.168.56.1:8080/Projetotc/";
+    configApp.urlServidor = "http://192.168.0.104:8080/Projetotc/";
     /* configApp.urlServidor =
         "https://sistemaagely.com.br:8245/ChaDeLingerie24112020/"; */
     return configApp.urlServidor;
