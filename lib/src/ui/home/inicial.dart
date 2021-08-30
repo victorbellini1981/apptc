@@ -1,8 +1,10 @@
 import 'package:apptc/core/utils.dart';
 import 'package:apptc/src/models/Atividade.dart';
 import 'package:apptc/src/public/globals.dart';
+import 'package:apptc/src/ui/login/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 class Inicial extends StatefulWidget {
@@ -17,6 +19,7 @@ class _InicialState extends State<Inicial> {
 
   var interval = "";
   List list;
+  List datacerta = [];
   Dialog ativ;
   var dataAtv = "";
 
@@ -34,16 +37,21 @@ class _InicialState extends State<Inicial> {
     if (retorno['situacao'] == 'sucesso' && retorno['obj'].length > 0) {
       list = retorno['obj'];
       listaAtividades = list.map((atv) => Atividade.fromJson(atv)).toList();
-      /* for (int i = 0; i < listaAtividades.length; i++) {
+      for (int i = 0; i < listaAtividades.length; i++) {
+        Atividade ativicty = Atividade();
+        ativicty.data_atv = '${listaAtividades[i].data_atv}';
+        ativicty.atividade = '${listaAtividades[i].atividade}';
+        datacerta.add(ativicty);
         var ano = listaAtividades[i].data_atv.split("-")[0];
         var mes = listaAtividades[i].data_atv.split("-")[1];
         var dia = listaAtividades[i].data_atv.split("-")[2];
         dia = dia.split(" ")[0];
         var hora = listaAtividades[i].data_atv.split(" ")[1];
-        listaAtividades[i].data_atv = dia + "/" + mes + "/" + ano + " " + hora;
-      } */
+        datacerta[i].data_atv = dia + "/" + mes + "/" + ano + " " + hora;
+      }
     } else {
       listaAtividades = [];
+      datacerta = [];
     }
 
     return listaAtividades;
@@ -71,19 +79,42 @@ class _InicialState extends State<Inicial> {
     }
   }
 
-  void finalizar() {}
+  void finalizar() {
+    int num = listaAtividades.length;
+    if (listaAtividades[num - 1].atividade == "escolha a atividade") {
+      // ignore: deprecated_member_use
+      _scaffoldKey.currentState.showSnackBar(new SnackBar(
+          duration: Duration(seconds: 2),
+          content: new Text('Escolha a todas as atividades.')));
+    } else {
+      // ignore: deprecated_member_use
+      _scaffoldKey.currentState.showSnackBar(new SnackBar(
+          duration: Duration(seconds: 2), content: new Text('Obrigado!!!')));
+      Future.delayed(Duration(seconds: 2), () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Login()));
+      });
+    }
+  }
 
   atualizaAtvHora() async {
-    Navigator.of(context).pop();
-    Map obj = Map();
-    obj['idusuario'] = idUsuario;
-    obj['data_atv'] = dataAtv;
-    obj['atividade'] = _atividade.text;
-    Map retorno = await promessa(_scaffoldKey, 'UpAtividade', obj);
-    if (retorno['situacao'] == 'sucesso') {
-      setState(() {
-        listaAtividades[pos].atividade = _atividade.text;
-      });
+    if (_atividade.text.isNotEmpty) {
+      Navigator.of(context).pop();
+      Map obj = Map();
+      obj['idusuario'] = idUsuario;
+      obj['data_atv'] = dataAtv;
+      obj['atividade'] = _atividade.text;
+      Map retorno = await promessa(_scaffoldKey, 'UpAtividade', obj);
+      if (retorno['situacao'] == 'sucesso') {
+        setState(() {
+          listaAtividades[pos].atividade = _atividade.text;
+        });
+      }
+    } else {
+      // ignore: deprecated_member_use
+      _scaffoldKey.currentState.showSnackBar(new SnackBar(
+          duration: Duration(seconds: 1),
+          content: new Text('Preencha o campo da atividade')));
     }
   }
 
@@ -130,13 +161,13 @@ class _InicialState extends State<Inicial> {
                           child: Row(
                             children: [
                               Expanded(
-                                flex: 4,
+                                flex: 5,
                                 child: Text(
-                                  listaAtividades[index].data_atv,
+                                  datacerta[index].data_atv,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color: Color(0xffb22222),
-                                      fontSize: 15,
+                                      fontSize: 14,
                                       fontFamily: 'Montserrat'),
                                 ),
                               ),
@@ -147,12 +178,12 @@ class _InicialState extends State<Inicial> {
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color: Color(0xffb22222),
-                                      fontSize: 15,
+                                      fontSize: 14,
                                       fontFamily: 'Montserrat'),
                                 ),
                               ),
                               Expanded(
-                                flex: 3,
+                                flex: 4,
                                 child: SizedBox(
                                     // ignore: deprecated_member_use
                                     child: RaisedButton(
@@ -167,7 +198,7 @@ class _InicialState extends State<Inicial> {
                                       "Atv",
                                       style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: 15,
+                                          fontSize: 14,
                                           fontFamily: 'Montserrat'),
                                     ),
                                   ),
@@ -209,7 +240,7 @@ class _InicialState extends State<Inicial> {
                                                                     children: [
                                                                       Positioned(
                                                                         top: 0,
-                                                                        left: 5,
+                                                                        left: 0,
                                                                         child:
                                                                             IconButton(
                                                                           icon:
@@ -220,8 +251,7 @@ class _InicialState extends State<Inicial> {
                                                                               30.0,
                                                                           onPressed:
                                                                               () {
-                                                                            Navigator.push(context,
-                                                                                MaterialPageRoute(builder: (context) => Inicial()));
+                                                                            Navigator.of(context).pop();
                                                                           },
                                                                         ),
                                                                       ),
@@ -233,7 +263,7 @@ class _InicialState extends State<Inicial> {
                                                                             color: Colors
                                                                                 .white,
                                                                             fontSize:
-                                                                                20,
+                                                                                18,
                                                                             fontFamily:
                                                                                 'Montserrat'),
                                                                       ),
@@ -378,20 +408,20 @@ class _InicialState extends State<Inicial> {
                                                                             children: [
                                                                               Positioned(
                                                                                 top: 0,
-                                                                                left: 5,
+                                                                                left: 0,
                                                                                 child: IconButton(
                                                                                   icon: Icon(Icons.close),
                                                                                   color: Colors.white,
                                                                                   iconSize: 30.0,
                                                                                   onPressed: () {
-                                                                                    Navigator.push(context, MaterialPageRoute(builder: (context) => Inicial()));
+                                                                                    Navigator.of(context).pop();
                                                                                   },
                                                                                 ),
                                                                               ),
                                                                               Text(
                                                                                 "Digite a atividade",
                                                                                 textAlign: TextAlign.center,
-                                                                                style: TextStyle(color: Colors.white, fontSize: 20, fontFamily: 'Montserrat'),
+                                                                                style: TextStyle(color: Colors.white, fontSize: 18, fontFamily: 'Montserrat'),
                                                                               ),
                                                                             ],
                                                                           ),
