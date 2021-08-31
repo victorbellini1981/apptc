@@ -162,7 +162,7 @@ class _CadastroState extends State<Cadastro> {
             obj["email"] = txtlogin.text.trim();
             obj["senha"] =
                 textToMd5("*${txtsenha.text.trim()}${configApp.nomeApp}");
-            obj["nome"] = txtnome.text;
+            obj["nome"] = txtnome.text.toUpperCase();
             obj["cpf"] = txtcpf.text;
             obj["telefone"] = txttelefone.text;
             obj["idade"] = txtidade.text;
