@@ -22,6 +22,10 @@ class _InicialState extends State<Inicial> {
   List datacerta = [];
   Dialog ativ;
   var dataAtv = "";
+  // ignore: deprecated_member_use
+  List listaAtividade = new List();
+  bool iniciapg = false;
+  DateTime agora;
 
   final _atividade = TextEditingController();
 
@@ -31,22 +35,26 @@ class _InicialState extends State<Inicial> {
   }
 
   carregaAtividades() async {
+    listaAtividades = [];
+    datacerta = [];
     Map obj = Map();
     obj['idusuario'] = idUsuario;
     Map retorno = await promessa(_scaffoldKey, 'GetAtividades', obj);
     if (retorno['situacao'] == 'sucesso' && retorno['obj'].length > 0) {
       list = retorno['obj'];
-      listaAtividades = list.map((atv) => Atividade.fromJson(atv)).toList();
-      for (int i = 0; i < listaAtividades.length; i++) {
+      listaAtividade = list.map((atv) => Atividade.fromJson(atv)).toList();
+      for (int i = 0; i < (listaAtividade.length - 1); i++) {
         Atividade ativicty = Atividade();
-        ativicty.data_atv = '${listaAtividades[i].data_atv}';
-        ativicty.atividade = '${listaAtividades[i].atividade}';
+        ativicty.data_atv = '${listaAtividade[i].data_atv}';
+        print(ativicty.data_atv);
+        ativicty.atividade = '${listaAtividade[i].atividade}';
         datacerta.add(ativicty);
-        var ano = listaAtividades[i].data_atv.split("-")[0];
-        var mes = listaAtividades[i].data_atv.split("-")[1];
-        var dia = listaAtividades[i].data_atv.split("-")[2];
+        listaAtividades.add(ativicty);
+        var ano = listaAtividade[i].data_atv.split("-")[0];
+        var mes = listaAtividade[i].data_atv.split("-")[1];
+        var dia = listaAtividade[i].data_atv.split("-")[2];
         dia = dia.split(" ")[0];
-        var hora = listaAtividades[i].data_atv.split(" ")[1];
+        var hora = listaAtividade[i].data_atv.split(" ")[1];
         datacerta[i].data_atv = dia + "/" + mes + "/" + ano + " " + hora;
       }
     } else {
@@ -57,8 +65,21 @@ class _InicialState extends State<Inicial> {
     return listaAtividades;
   }
 
+  void salvaBatimentos() {
+    for (int i = 1; i < listaAtividade.length; i++) {
+      dtinicial = '${listaAtividade[i - 1].data_atv}';
+      dtfinal = '${listaAtividade[i].data_atv}';
+      agora = new DateTime.now();
+      while (agora.toString() != dtfinal) {
+        agora = new DateTime.now();
+      }
+      // chama a função que vai pegar os batimentos registrados pelo apple watch
+      // passando datainicial e datafinal e salva os batimentos no bd
+    }
+  }
+
   void iniciar() async {
-    for (int i = 0; i < 24; i++) {
+    for (int i = 0; i < 25; i++) {
       interval = i.toString();
 
       Map obj = new Map();
@@ -70,13 +91,18 @@ class _InicialState extends State<Inicial> {
 
       if (retorno["situacao"] == "sucesso" &&
           retorno['obj']['idatividade'] != 0 &&
-          i == 23) {
+          i == 24) {
         // ignore: deprecated_member_use
         _scaffoldKey.currentState.showSnackBar(new SnackBar(
             duration: Duration(seconds: 2),
             content: new Text('Atividades cadastradas com sucesso')));
       }
     }
+    setState(() {
+      iniciapg == false ? iniciapg = true : iniciapg = false;
+    });
+
+    salvaBatimentos();
   }
 
   void finalizar() {
@@ -204,7 +230,7 @@ class _InicialState extends State<Inicial> {
                                   ),
                                   onPressed: () {
                                     pos = index;
-                                    dataAtv = listaAtividades[index].data_atv;
+                                    dataAtv = listaAtividade[index].data_atv;
                                     index == 0
                                         ? showDialog(
                                             context: context,

@@ -12,3 +12,5 @@ List listaAtividades = new List();
 List listaBatimentos = new List();
 int pos = 0;
 var teste;
+var dtinicial = "";
+var dtfinal = "";
