@@ -71,10 +71,12 @@ class _InicialState extends State<Inicial> {
       dtfinal = '${listaAtividade[i].data_atv}';
       agora = new DateTime.now();
       while (agora.toString() != dtfinal) {
-        agora = new DateTime.now();
+        Future.delayed(Duration(minutes: 15), () {
+          //aqui chama a função que pegará os batimentos armazenados no
+          //applewatch, salva esses dados, o dia e a hora no bd.
+          agora = new DateTime.now();
+        });
       }
-      // chama a função que vai pegar os batimentos registrados pelo apple watch
-      // passando datainicial e datafinal e salva os batimentos no bd
     }
   }
 
@@ -111,15 +113,81 @@ class _InicialState extends State<Inicial> {
       // ignore: deprecated_member_use
       _scaffoldKey.currentState.showSnackBar(new SnackBar(
           duration: Duration(seconds: 2),
-          content: new Text('Escolha a todas as atividades.')));
+          content: new Text('Escolha todas as atividades.')));
     } else {
-      // ignore: deprecated_member_use
-      _scaffoldKey.currentState.showSnackBar(new SnackBar(
-          duration: Duration(seconds: 2), content: new Text('Obrigado!!!')));
-      Future.delayed(Duration(seconds: 2), () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Login()));
-      });
+      showDialog(
+          context: context,
+          builder: (BuildContext context) => Dialog(
+                elevation: 10,
+                child: Wrap(children: [
+                  Container(
+                      margin: EdgeInsets.only(top: 0),
+                      width: MediaQuery.of(context).size.width * 1,
+                      child: Column(
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width * 1,
+                            height: 50,
+                            color: Color(0xffb22222),
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Text(
+                                  "",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontFamily: 'Montserrat'),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            "Obrigado por utilizar nosso App!",
+                            style: TextStyle(
+                                color: Color(0xffb22222),
+                                fontSize: 20,
+                                fontFamily: 'Montserrat'),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          SizedBox(
+                              width: 80,
+                              // ignore: deprecated_member_use
+                              child:
+                                  // ignore: deprecated_member_use
+                                  RaisedButton(
+                                color: Color(0xffb22222),
+                                child: Center(
+                                  child: Text(
+                                    "Ok",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                        fontFamily: 'Montserrat'),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Login()));
+                                },
+                              )),
+                          Container(
+                              width: MediaQuery.of(context).size.width * 1,
+                              height: 30,
+                              color: Color(0xffb22222),
+                              child: Text(""))
+                        ],
+                      )),
+                ]),
+              ));
     }
   }
 
@@ -568,7 +636,7 @@ class _InicialState extends State<Inicial> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async => true,
       child: SafeArea(
         child: Scaffold(
           key: _scaffoldKey,

@@ -1,6 +1,6 @@
 import 'package:apptc/core/utils.dart';
 import 'package:apptc/src/public/globals.dart';
-import 'package:apptc/src/ui/home/inicial.dart';
+import 'package:apptc/src/ui/login/login.dart';
 import 'package:easy_mask/easy_mask.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -179,8 +179,8 @@ class _CadastroState extends State<Cadastro> {
                   duration: Duration(seconds: 1),
                   content: new Text('Cadastro realizado com sucesso!')));
               Future.delayed(Duration(seconds: 1), () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Inicial()));
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Login()));
               });
             } else {
               setState(() {

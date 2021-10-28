@@ -35,8 +35,8 @@ Future<String> getUrlServidor() async {
     }
   } else {
     //configApp.urlServidor = "http://192.168.106.125:8080/Projetotc/";
-    //configApp.urlServidor = "http://192.168.0.104:8080/Projetotc/";
-    configApp.urlServidor = "http://192.168.56.1:8080/Projetotc/";
+    configApp.urlServidor = "http://10.0.0.233:8080/Projetotc/";
+    //configApp.urlServidor = "http://192.168.56.1:8080/Projetotc/";
     /* configApp.urlServidor =
         "https://sistemaagely.com.br:8245/ChaDeLingerie24112020/"; */
     return configApp.urlServidor;
