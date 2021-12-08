@@ -186,6 +186,8 @@ class _LoginState extends State<Login> {
             content: new Text('Algo errado com os dados')));
         Navigator.of(context).pop();
       }
+      _loginController.text = "";
+      _senhaController.text = "";
     }
 
     final btnEntrar = SizedBox(

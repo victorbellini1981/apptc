@@ -152,6 +152,7 @@ class _InicialState extends State<Inicial> {
                                 color: Color(0xffb22222),
                                 fontSize: 20,
                                 fontFamily: 'Montserrat'),
+                            textAlign: TextAlign.center,
                           ),
                           SizedBox(
                             height: 20,

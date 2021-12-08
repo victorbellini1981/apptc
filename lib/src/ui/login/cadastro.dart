@@ -380,7 +380,7 @@ class _CadastroState extends State<Cadastro> {
         labelText: 'Idade',
         labelStyle: TextStyle(
             color: Color(0xffb22222),
-            fontSize: 14,
+            fontSize: 13,
             fontFamily: 'Montserrat',
             fontWeight: FontWeight.bold),
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 10.0),
@@ -407,7 +407,7 @@ class _CadastroState extends State<Cadastro> {
         labelText: 'Peso',
         labelStyle: TextStyle(
             color: Color(0xffb22222),
-            fontSize: 14,
+            fontSize: 13,
             fontFamily: 'Montserrat',
             fontWeight: FontWeight.bold),
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 10.0),
@@ -434,7 +434,7 @@ class _CadastroState extends State<Cadastro> {
         labelText: 'Altura',
         labelStyle: TextStyle(
             color: Color(0xffb22222),
-            fontSize: 14,
+            fontSize: 13,
             fontFamily: 'Montserrat',
             fontWeight: FontWeight.bold),
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 10.0),
@@ -540,23 +540,23 @@ class _CadastroState extends State<Cadastro> {
                 Row(
                   children: <Widget>[
                     Expanded(
-                      flex: 3,
+                      flex: 6,
                       child: idade,
                     ),
                     Expanded(
-                      flex: 1,
+                      flex: 0,
                       child: Text(" "),
                     ),
                     Expanded(
-                      flex: 3,
+                      flex: 5,
                       child: peso,
                     ),
                     Expanded(
-                      flex: 1,
+                      flex: 0,
                       child: Text(" "),
                     ),
                     Expanded(
-                      flex: 3,
+                      flex: 6,
                       child: altura,
                     )
                   ],
@@ -582,6 +582,9 @@ class _CadastroState extends State<Cadastro> {
                       ),
                     ),
                   ),
+                ),
+                SizedBox(
+                  height: 15,
                 )
               ],
             ),
